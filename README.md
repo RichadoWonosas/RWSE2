@@ -2,7 +2,7 @@
 
 **CAUTION:** **This cryptographic algorithm is not in any standard and its security is not yet verified.**
 
-RichadoWonosas's Symmetric Encryption Version 2 (RWSE2) is an encryption algorithm designed by RichadoWonosas. Despite version 2, it is the first published version. The design is deeply affected by *Rijndael*.
+RichadoWonosas's Symmetric Encryption Version 2 (RWSE2) is an encryption algorithm designed by RichadoWonosas. Despite version 2, it is the first published version. The design is deeply affected by [*Rijndael*](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard).
 
 ## 1. Introduction
 
