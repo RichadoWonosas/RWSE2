@@ -295,15 +295,15 @@ inline void Subu8s(u8 *message, int operation)
 
 inline void RWshuffle(u64 *message)
 {
-    message[0] = shuf(message[0], 3, 1);
+    message[0] = shuf(message[0], 5, 1);
     message[1] = shuf(message[1], 23, 3);
     message[2] = shuf(message[2], 41, 5);
-    message[3] = shuf(message[3], 61, 7);
+    message[3] = shuf(message[3], 59, 7);
     MixColumn(message);
-    message[0] = reshuf(message[0], 3, 1);
+    message[0] = reshuf(message[0], 5, 1);
     message[1] = reshuf(message[1], 23, 3);
     message[2] = reshuf(message[2], 41, 5);
-    message[3] = reshuf(message[3], 61, 7);
+    message[3] = reshuf(message[3], 59, 7);
 }
 
 inline void MixColumn(u64 *message)
