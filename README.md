@@ -29,6 +29,7 @@ Besides, an *Expand Key* operation is introduced for generating round keys from 
 RWSE2 has a 256-bit block for encryption or decryption. We use $B$ to represent the block.
 
 $B$ consists of 4 quad-words:
+
 $$
 B = \left[
     \begin{matrix}
@@ -41,6 +42,7 @@ B = \left[
 $$
 
 Each quad-word has 8 bytes:
+
 $$
 q = \left[
     \begin{matrix}
@@ -50,6 +52,7 @@ q = \left[
 $$
 
 In other words,
+
 $$
 B = \left[
     \begin{matrix}
@@ -62,11 +65,13 @@ B = \left[
 $$
 
 Say the value of $q$ is $|q|$, then $|q|$ follows little endian:
+
 $$
 |q| = \sum_{j = 0}^{7}{b_{j} \cdot (2^{8})^j}.
 $$
 
 In S-box, a byte $b$ is also splitted into 8 bits (We use $d$ for digit to represent bit, preventing from confusing with $b$ for byte):
+
 $$
 b = \left[
     \begin{matrix}
@@ -85,6 +90,7 @@ $$
 ## 3. Add Round Key
 
 Every round uses 4 quad-words of round key to add round key to the block. Say $rk_i$ is the $i$-th quad-word of all round keys starting from 0th, then the round key for $i$-th round is
+
 $$
 R_i = \left[
     \begin{matrix}
@@ -97,6 +103,7 @@ R_i = \left[
 $$
 
 So the Add Round Key operation in $i$-th round to the block is
+
 $$
 RK_i(B) = B \oplus R_i = \left[
     \begin{matrix}
@@ -107,6 +114,7 @@ RK_i(B) = B \oplus R_i = \left[
     \end{matrix}
 \right]
 $$
+
 where operation $\oplus$ represents bitwise exclusive or (XOR) operation.
 
 ## 4. Substitute Bytes
@@ -114,16 +122,19 @@ where operation $\oplus$ represents bitwise exclusive or (XOR) operation.
 ### 4.1. Substitution Box
 
 A substitution box (S-box) is used to perform the byte-wise substitution. The formula of S-box is
+
 $$
 Sb(b) = (A\cdot(\text{0xa4})^b) \oplus (\text{0xe3})
 $$
 
 where the power operation defines on Galois Field $\text{GF}(2^8)$ with the primitive polynomial
+
 $$g(x) = x^8 + x^4 + x^3 + x^2 + 1.$$
 
 Specially, define $(\text{0xa4})^{(\text{0xff})} = (\text{0x00})$ because the original value $(\text{0xa4})^{(\text{0xff})} = (\text{0xa4})^{(\text{0x00})} = (\text{0x01})$.
 
 $A$ defines as the following matrix
+
 $$
 A = \left[
     \begin{matrix}
@@ -202,6 +213,7 @@ RW's Shuffle is a sequence of three basic operations:
 3. Reshuffle $S^{-1}$: The inverse of Shuffle $S$.
 
 So the RW's Shuffle is defined as
+
 $$
 SH(B) = S^{-1}(M(S(B))).
 $$
@@ -237,12 +249,14 @@ Two constants used for shuffle operation: Upper Mask $u = \text{0x92929292929292
 2. $\left\lbrace\begin{matrix}u \lll 8 = u \\ u \ggg 8 = u \end{matrix}\right.$, $\left\lbrace\begin{matrix}l \lll 8 = l \\ l \ggg 8 = l \end{matrix}\right.$, where $\lll$ and $\ggg$ represents circular left and right shift of quad-word.
 
 The single shuffle operation $s$ operates on quad-word, and receive two more parameters: $sd$ for digits to shift, $so$ for shuffle operation. $s$ is as follows:
+
 $$
 s(q, sd, so) = ((q \land u) \lll (8 \cdot so) \oplus (q \land l)) \ggg sd
 $$
 where $\land$ stands for bitwise and (AND) operation.
 
 The single reshuffle operation, the inverse of the single shuffle operation, is defined as follows:
+
 $$
 s^{-1}(q, sd, so) = ((q \lll sd) \land u) \ggg (8 \cdot so) \oplus ((q \lll sd) \land l).
 $$
@@ -286,6 +300,7 @@ flowchart LR
 ### 5.2. Shuffle/Reshuffle
 
 Shuffle operation is defined as
+
 $$
 S(B) = S(\left[
     \begin{matrix}
@@ -305,6 +320,7 @@ S(B) = S(\left[
 $$
 
 with Reshuffle operation defined as
+
 $$
 S^{-1}(B) = S^{-1}(\left[
     \begin{matrix}
@@ -326,6 +342,7 @@ $$
 ### 5.3. Mix Column
 
 The Mix Column operation $M$ is as follows:
+
 $$
 \begin{align*}
 M(B) & = X \cdot B\\
@@ -357,6 +374,7 @@ The matrix $X = \left[
         01 & 02 & 01 & 03\\
     \end{matrix}
 \right]$ is a self-invertible matrix, that is,
+
 $$
 X^2 = \left[
     \begin{matrix}
@@ -383,9 +401,11 @@ X^2 = \left[
 $$
 
 So the Mix Column operation satisfies that
+
 $$
 M(M(B)) = X \cdot X \cdot B = B,
 $$
+
 that is, the Mix Column operation is self-invertible.
 
 ### 5.4. RW's Shuffle's Self-Invertibility
