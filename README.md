@@ -246,13 +246,14 @@ flowchart LR
 Two constants used for shuffle operation: Upper Mask $u = \text{0x9292929292929292}$ and Lower Mask $l = \text{0x6d6d6d6d6d6d6d6d}$. They satisfy:
 
 1. $u \oplus l = \text{0xffffffffffffffff} = (\underbrace{111 \dots 11}_{128})_2$.
-2. $\left\lbrace\begin{matrix}u \lll 8 = u \\ u \ggg 8 = u \end{matrix}\right.$, $\left\lbrace\begin{matrix}l \lll 8 = l \\ l \ggg 8 = l \end{matrix}\right.$, where $\lll$ and $\ggg$ represents circular left and right shift of quad-word.
+2. $u \lll 8 = u$, $u \ggg 8 = u$, $l \lll 8 = l$, $l \ggg 8 = l$, where $\lll$ and $\ggg$ represents circular left and right shift of quad-word.
 
 The single shuffle operation $s$ operates on quad-word, and receive two more parameters: $sd$ for digits to shift, $so$ for shuffle operation. $s$ is as follows:
 
 $$
 s(q, sd, so) = ((q \land u) \lll (8 \cdot so) \oplus (q \land l)) \ggg sd
 $$
+
 where $\land$ stands for bitwise and (AND) operation.
 
 The single reshuffle operation, the inverse of the single shuffle operation, is defined as follows:
@@ -366,14 +367,20 @@ $$
 
 Each byte represents an element on $\text{GF}(2^8)$, so the multiplication and addition for each element follows the ones on $\text{GF}(2^8)$.
 
-The matrix $X = \left[
+The matrix
+
+$$
+X = \left[
     \begin{matrix}
         03 & 01 & 02 & 01\\
         01 & 03 & 01 & 02\\
         02 & 01 & 03 & 01\\
         01 & 02 & 01 & 03\\
     \end{matrix}
-\right]$ is a self-invertible matrix, that is,
+\right]
+$$
+
+is a self-invertible matrix, that is,
 
 $$
 X^2 = \left[
